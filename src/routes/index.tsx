@@ -100,6 +100,8 @@ export default component$(() => {
     // return resultA;
     return [resultA.data, resultB.data];
   });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     setTimeout(() => location.reload(), 10);
   });
