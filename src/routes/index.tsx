@@ -4,6 +4,7 @@ import {
   useResource$,
   useSignal,
   useTask$,
+  useVisibleTask$,
 } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { getData } from "./getData";
@@ -12,11 +13,11 @@ import { getData2 } from "./getData2";
 export const Home2 = component$(() => {
   const data = useSignal("Hello");
   const data2 = useSignal("world");
-  const resource = useResource$(async () => {
-    const resultA = await getData();
-    const resultB = await getData2();
-    return [resultA.data, resultB.data];
-  });
+  // const resource = useResource$(async () => {
+  //   const resultA = await getData();
+  //   const resultB = await getData2();
+  //   return [resultA.data, resultB.data];
+  // });
   useTask$(async () => {
     data.value = (await getData("first server")).data;
     data2.value = (await getData2("first server")).data;
@@ -42,7 +43,8 @@ export const Home2 = component$(() => {
         <br />
         <br />
         {data.value}
-        {data2.value}
+        <div>Nested</div>
+        <pre>{data2.value}</pre>
       </div>
     </>
   );
@@ -80,15 +82,13 @@ export const Home = component$(() => {
         <br />
         <br />
         {data.value}
-        {data2.value}
+        <pre>{data2.value}</pre>
       </div>
     </>
   );
 });
 
 export default component$(() => {
-  // const yo = _context;
-  // console.log("_context", _context);
   // const data = useSignal("Hello");
   // const data2 = useSignal("world");
   const resource = useResource$(async () => {
@@ -99,6 +99,9 @@ export default component$(() => {
 
     // return resultA;
     return [resultA.data, resultB.data];
+  });
+  useVisibleTask$(() => {
+    setTimeout(() => location.reload(), 10);
   });
   // useTask$(async () => {
   //   data.value = (await getData("first server")).data;
@@ -113,7 +116,7 @@ export default component$(() => {
           value={resource}
           onResolved={([resultA, resultB]) => (
             <>
-              {resultA} {resultB}
+              {resultA} ??{resultB}??
             </>
           )}
         />
